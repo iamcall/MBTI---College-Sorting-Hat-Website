@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -125,7 +125,7 @@ const getTopMajors = (college: string | undefined | null): string[] => {
   return COLLEGE_TOP_MAJORS[normalized] ?? DEFAULT_TOP_MAJORS
 }
 
-export default function ResultsPage() {
+function ResultsPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const mbtiFromQuery = searchParams.get('mbti')
@@ -343,5 +343,28 @@ export default function ResultsPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+function ResultsFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <Card className="w-full max-w-md border-0 shadow-2xl shadow-indigo-100">
+        <CardContent className="pt-10 pb-12 text-center space-y-4">
+          <div className="mx-auto h-14 w-14 rounded-full border-4 border-dashed border-indigo-300 animate-spin"></div>
+          <p className="text-lg font-medium text-slate-700">
+            Loading your Sorting Hat insights...
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+export default function ResultsPage() {
+  return (
+    <Suspense fallback={<ResultsFallback />}>
+      <ResultsPageContent />
+    </Suspense>
   )
 }
