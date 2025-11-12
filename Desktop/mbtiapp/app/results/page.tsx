@@ -197,7 +197,8 @@ export default function ResultsPage() {
     )
   }
 
-  const hasRecommendation = recommendation.hasEnoughData && recommendation.recommended
+  const hasRecommendation = recommendation.hasEnoughData && !!recommendation.recommended
+  const recommendedCollege = hasRecommendation ? recommendation.recommended : null
   const funFacts = MBTI_FUN_FACTS[mbti] ?? DEFAULT_FUN_FACTS
   const topMajors = hasRecommendation && recommendation.recommended
     ? getTopMajors(recommendation.recommended.college)
@@ -276,10 +277,10 @@ export default function ResultsPage() {
           </CardContent>
         </Card>
 
-        {hasRecommendation && (
+        {hasRecommendation && recommendedCollege && (
           <CollegeComparison
-            colleges={[recommendation.recommended, ...recommendation.alternatives]}
-            recommendedCollege={recommendation.recommended.college}
+            colleges={[recommendedCollege, ...recommendation.alternatives]}
+            recommendedCollege={recommendedCollege.college}
           />
         )}
 
