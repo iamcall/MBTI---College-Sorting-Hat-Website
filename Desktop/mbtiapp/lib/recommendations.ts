@@ -108,8 +108,16 @@ export async function recommendCollege(mbti: string): Promise<RecommendationResu
       })
     })
 
-    // Sort by score (highest first)
-    collegeStats.sort((a, b) => b.score - a.score)
+    // Sort by score (highest first) with deterministic tie-breakers
+    collegeStats.sort((a, b) => {
+      const scoreDiff = b.score - a.score
+      if (scoreDiff !== 0) return scoreDiff
+
+      const responseDiff = b.totalResponses - a.totalResponses
+      if (responseDiff !== 0) return responseDiff
+
+      return a.college.localeCompare(b.college)
+    })
 
     // Return results
     if (collegeStats.length === 0) {
