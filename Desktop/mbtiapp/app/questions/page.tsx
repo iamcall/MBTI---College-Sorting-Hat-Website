@@ -110,6 +110,7 @@ export default function QuestionsPage() {
         college: 'Other',
         fit: null,
         would_switch: null,
+        switch_college: null,
       }
 
       const { error } = await supabase.from('responses').insert([responseData])

@@ -37,6 +37,7 @@ export default function ExperiencePage() {
   const [college, setCollege] = useState('')
   const [fit, setFit] = useState<string>('')
   const [wouldSwitch, setWouldSwitch] = useState<string>('')
+  const [switchCollege, setSwitchCollege] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [questionData, setQuestionData] = useState<any>(null)
 
@@ -59,6 +60,11 @@ export default function ExperiencePage() {
       return
     }
 
+    if (wouldSwitch === 'yes' && !switchCollege) {
+      alert('Please select which college you would switch into')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -69,7 +75,8 @@ export default function ExperiencePage() {
         mbti: questionData.mbti,
         college,
         fit: fit === 'yes',
-        would_switch: wouldSwitch === 'yes'
+        would_switch: wouldSwitch === 'yes',
+        switch_college: wouldSwitch === 'yes' ? switchCollege : null
       }
 
       // Insert into Supabase
@@ -96,6 +103,13 @@ export default function ExperiencePage() {
 
   if (!questionData) {
     return null // Or a loading spinner
+  }
+
+  const handleWouldSwitchChange = (value: string) => {
+    setWouldSwitch(value)
+    if (value !== 'yes') {
+      setSwitchCollege('')
+    }
   }
 
   return (
@@ -162,7 +176,7 @@ export default function ExperiencePage() {
               {/* Would Switch Question */}
               <div className="space-y-4">
               <Label className="text-slate-700">If you could rewind, would you switch majors?</Label>
-              <RadioGroup value={wouldSwitch} onValueChange={setWouldSwitch} className="grid gap-4 md:grid-cols-2">
+              <RadioGroup value={wouldSwitch} onValueChange={handleWouldSwitchChange} className="grid gap-4 md:grid-cols-2">
                 {[
                   {
                     value: 'yes',
@@ -187,6 +201,27 @@ export default function ExperiencePage() {
                   ))}
                 </RadioGroup>
               </div>
+
+              {wouldSwitch === 'yes' && (
+                <div className="space-y-2">
+                  <Label htmlFor="switch-college" className="text-slate-700">Which college would you switch into?</Label>
+                  <Select value={switchCollege} onValueChange={setSwitchCollege}>
+                    <SelectTrigger id="switch-college" className="rounded-2xl border-slate-200 focus:ring-rose-200">
+                      <SelectValue placeholder="Choose the college for your new major" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {BYU_COLLEGES.map((collegeName) => (
+                        <SelectItem key={`switch-${collegeName}`} value={collegeName}>
+                          {collegeName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-slate-500">
+                    You can pick the same college again if the new major still lives there.
+                  </p>
+                </div>
+              )}
 
               <div className="pt-2 flex flex-col gap-3 sm:flex-row">
                 <Button

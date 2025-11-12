@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS responses (
   mbti TEXT NOT NULL,
   college TEXT,
   fit BOOLEAN,
-  would_switch BOOLEAN
+  would_switch BOOLEAN,
+  switch_college TEXT
 );
 
 -- Add any missing columns (if table exists but is missing columns)
@@ -55,6 +56,11 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns
                  WHERE table_name='responses' AND column_name='would_switch') THEN
     ALTER TABLE responses ADD COLUMN would_switch BOOLEAN;
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                 WHERE table_name='responses' AND column_name='switch_college') THEN
+    ALTER TABLE responses ADD COLUMN switch_college TEXT;
   END IF;
 END $$;
 
