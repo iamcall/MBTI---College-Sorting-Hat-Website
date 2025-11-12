@@ -254,8 +254,8 @@ function ResultsPageContent() {
                   <p className="text-sm text-amber-800">
                     Not enough {mbti} students have weighed in per college yet. Share the quiz to unlock more insights!
                   </p>
-                  <Link href="https://sortinghat.app/share" className="text-sm font-semibold text-indigo-600 underline">
-                    Share the quiz (temporary link)
+                  <Link href="https://collegesortinghatmbti.vercel.app" className="text-sm font-semibold text-indigo-600 underline">
+                    Share the quiz
                   </Link>
                 </div>
                 )}
