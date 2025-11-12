@@ -9,6 +9,8 @@ interface CollegeComparisonProps {
 export function CollegeComparison({ colleges, recommendedCollege }: CollegeComparisonProps) {
   if (colleges.length === 0) return null
 
+  const maxResponses = Math.max(...colleges.map((college) => college.totalResponses))
+
   return (
     <Card>
       <CardHeader>
@@ -27,6 +29,12 @@ export function CollegeComparison({ colleges, recommendedCollege }: CollegeCompa
                   {college.college === recommendedCollege && (
                     <span className="ml-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
                       Recommended
+                    </span>
+                  )}
+                  {college.totalResponses === maxResponses && maxResponses > 0 && (
+                    <span className="ml-2 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                      <span aria-hidden="true">★</span>
+                      <span>Most popular</span>
                     </span>
                   )}
                 </h4>
